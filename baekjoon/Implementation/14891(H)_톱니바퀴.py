@@ -64,43 +64,43 @@
 import sys
 from collections import deque
 
-gear = [[-1,-1,-1,-1,-1,-1,-1,-1]]
-score = 0
+gear = [[-1, -1, -1, -1, -1, -1, -1, -1]]
 deq = [0]
 for i in range(4):
     gear.append(list(sys.stdin.readline().rstrip()))
-    temp = deque([0,1,2,3,4,5,6,7])
-    deq.append(temp)
+    deq.append(deque([0, 1, 2, 3, 4, 5, 6, 7]))
 
 K = int(sys.stdin.readline().rstrip())
-backup = 0
+
+score = 0
 for i in range(K):
     idx, d = map(int, sys.stdin.readline().rstrip().split())
+    dir = d
+    left = gear[idx][deq[idx][6]]
+    for j in range(idx - 1, 0, -1):
+        a = gear[j][deq[j][2]]
+        if a == left:
+            break
+        else:
+            left = gear[j][deq[j][6]]
+            dir *= -1
+            deq[j].rotate(dir)
 
     dir = d
-    backup = gear[idx][deq[idx][6]]
-    for j in range(idx-1,0,-1):
-        a = gear[j][deq[j][2]]
-        if a == backup:
-            break
-        else:
-            backup = gear[j][deq[j][6]]
-            dir *= -1
-            deq[j].rotate(dir)
-    dir = d
-    backup = gear[idx][deq[idx][2]]
-    for j in range(idx+1,5):
+    right = gear[idx][deq[idx][2]]
+    for j in range(idx + 1, 5):
         a = gear[j][deq[j][6]]
-        if a == backup:
+        if a == right:
             break
         else:
-            backup = gear[j][deq[j][2]]
+            right = gear[j][deq[j][2]]
             dir *= -1
             deq[j].rotate(dir)
+
     deq[idx].rotate(d)
-for i in range(1,5):
+
+for i in range(1, 5):
     if gear[i][deq[i][0]] == '1':
-        score+=2**(i-1)
+        score += 2 ** (i - 1)
 
 print(score)
-

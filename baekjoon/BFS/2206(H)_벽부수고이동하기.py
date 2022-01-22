@@ -13,7 +13,7 @@ maps.append([1] * (M + 2))
 
 def bfs(N, M):
     global maps
-    visited = [[[sys.maxsize]*2 for j in range(M+2)] for i in range(N+2)]
+    visited = [[[sys.maxsize] * 2 for j in range(M + 2)] for i in range(N + 2)]
     dir = [(-1, 0), (+1, 0), (0, +1), (0, -1)]
     queue = deque([(1, 1, 0)])
     visited[1][1][0] = 1
@@ -26,12 +26,12 @@ def bfs(N, M):
             ny = y + dir[i][1]
             if maps[nx][ny] == 0:
                 if visited[nx][ny][s] == sys.maxsize:
-                    visited[nx][ny][s] = min(visited[x][y][s]+1, visited[nx][ny][s])
-                    queue.append((nx,ny,s))
+                    visited[nx][ny][s] = visited[x][y][s] + 1
+                    queue.append((nx, ny, s))
             else:
                 if s == 0:
                     visited[nx][ny][1] = visited[x][y][0] + 1
-                    queue.append((nx,ny,1))
+                    queue.append((nx, ny, 1))
 
     ans = min(visited[N][M])
     if ans == sys.maxsize:
