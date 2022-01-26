@@ -1,0 +1,39 @@
+#include<stdio.h>
+#include<limits.h>
+int K;
+int lan[10000];
+
+int countSegment(int digit) {
+	int cnt = 0;
+	for (int i = 0; i < K; i++) {
+		cnt += lan[i] / digit;
+	}
+	return cnt;
+}
+
+int func(int num, int N) {
+	int left = 1, right = num;
+	while (left < right) {
+		printf("%d - %d\n", left, right);
+		int mid = (left + right) / 2;
+		if (countSegment(mid) < N) {
+			right = mid - 1;
+		}
+		else {
+			left = mid;
+		}
+	}
+	return right;
+}
+int main() {
+	int N, min = INT_MAX;
+
+	scanf("%d%d%*c", &K, &N);
+	for (int i = 0; i < K; i++) {
+		scanf("%d%*c", &lan[i]);
+		if (min > lan[i])
+			min = lan[i];
+	}
+	printf("%d",func(min, N));
+	return 0;
+}

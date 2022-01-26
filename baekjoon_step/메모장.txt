@@ -1,0 +1,196 @@
+
+<메모장>
+
+* scanf 반환값 오류 무시 : 프로젝트 설정 > 고급 > 특정 경고 무시 > 6031 입력
+* scanf 사용 : 전처리기 정의 끝에 ;_CRT_SECURE_NO_WARNINGS; 입력
+* visual studio "쓰기용으로 열 수 없습니다" 오류 발생 시,
+	cmd > tasklist 
+	ctrl F 프로젝트 명 입력
+	PID 확인 (4자리)
+	taskkill /f /PID 번호
+
+==========================================================================================================
+
+[06/09]
+● \ 출력 : \\
+    '   출력 : \'
+    "   출력 : \"
+    %  출력 : %%
+● scanf 오류 해결
+    
+● 파일의 끝을 만날 때 까지 입력받기 : while(scanf() != EOF)
+
+[06/10]
+● 소수점 자릿수 조절
+ - 소수점 이하 6자리 출력 : %f, %lf
+ - 소수점 이하 0자리 출력 : %.f, %.lf (%.0f, %.olf)
+ - 소수점 이하 n자리 출력 : %.nf, %.nlf
+
+● 동적 배열 선언
+ - int* p = malloc(sizeof(int)*N); + free(p)
+
+★ 문자열 함수
+ - strlen(str) : 문자열 길이 반환 함수 (char 배열에 한해서 사용가능)
+ - strtok(str, " ") : 문자열 분리 함수  여러 토큰 사용할 때 >>("[,]")
+	char* ptr = strtok(str, " ");
+	while (ptr != NULL) {
+		printf("%s",ptr);
+		ptr = strtok(NULL, " ");
+	}
+ - atoi(str) : 문자열 정수로 변환
+
+● 배열 초기화 
+- array[5] = {0, } : 배열을 자동으로 0으로 채우기
+  ※ 0이 아닌 다른 수로 채우기는 불가능 (memset 함수나 반복문 이용) (memset 함수는 0과 -1로 초기화만 가능)
+      ex) #include<string.h> +  memset(array, -1, sizeof(array));
+	※동적 할당한 배열일 경우 sizeof(array) 대신 sizeof(int)*N 형식으로 사용
+
+● 반복문에서 굳이 한번만 사용해도 되는 함수는 반복하지 말기 (시간 초과) 
+    ex)  for(int i=0; i<strlen(array); i++)    >>   int len = strlen(array),  for(int i=0; i<len; i++)
+
+● scanf - 공백 만나면 입력 끊김 / gets - 한 행을 온전히 입력 받음
+'1 2 3 4 5' 형식으로 입력받을 때,    for( ; ; ; )			으로 하면, 알아서 공백 인식하여 입력받음 (공백 입력x)
+				 scanf("%d", &arr[i]);
+ ※scanf() 함수를 통해 입력된 공백 문자는 종료 문자로 인식함
+ ※scanf를 사용 후, 엔터 후 또 다른 입력을 받을 때, 앞서 입력된 개행문자가 버퍼에 남아 오류가 발생하는 경우가 있다
+   >> 앞서 사용한 scanf를 scanf("%d%*c", &num) 으로 사용 (%*c가 개행문자를 받아서 버림)
+
+● 문자열을 담을 배열은 원래 크기 +1 만큼 할당 (맨 마지막 NULL 자리)
+
+[06/11]
+● double형을 int형 변환시, 소수부분은 사라지고 정수부분만 남는다
+
+
+[06/24]
+● char 배열 최대 크기 : 약 1000000
+    int 배열 최대 크기 : 약 250000
+
+● 제곱근 : sqrt(double) or pow(double,0.5)
+
+● 절대값 : stdlib.h + abs(int) or math.h + fabs(double)
+
+[06/27]
+● 2차원 배열 동적할당
+int **arr;
+arr = (int**) malloc ( sizeof(int*) * height );
+for(int i=0; i<height; i++){
+    arr[i] = (int*) malloc ( sizeof(int) * width );
+}
+
+for(int i=0; i<height; i++){
+    free(arr[i]);
+}
+free(arr);
+
+[06/28]
+● 함수 인자로 2차원배열(arr[][])을 int** arr로 받을 수 없다 (동적 할당한 2차원 배열은 가능)
+
+[07/01]
+● 정렬 알고리즘
+O(N^2) >> 버블 정렬, 선택 정렬, 삽입 정렬
+O(NlogN) >> 병합 정렬, 힙 정렬
+ * 퀵 정렬의 경우 평균 시간복잡도는 O(NlogN)이지만 최악의 경우 O(N^2)가 될 수 있기 때문에 잘 생각하고 사용
+
+● 256MB >> int형 6400만개 
+    8MB >> int형 200만개
+
+[07/02]
+● 문자열 배열의 경우 무조건 char**로 만들어야 하는데, 각 문자열 항 사이의 이동 혹은 교환이 잦을 시 strcpy를 반복 호출해야한다
+   이는 시간초과의 원인이 될 수 있으므로 구조체로 string 타입을 만들어 사용하자 
+   (구조체의 경우 대입 연산자만으로 deep copy가 가능)
+
+[07/05]
+● stdlib.h + exit() : 현재 c프로그램을 완전 종료 
+	- exit(0) >> 에러 없이 정상 종료했단 의미
+	- exit(int) >> 에러 코드 반환
+
+● 백트래킹 문제에서 2차원 배열의 경우 1차원 배열의 연속으로 생각하고 진행
+
+[07/05]
+● limits.h + INT_MAX, INT_MIN >> 각각 int형의 최대값, 최소값 반환
+● 함수 포인터 선언 : int (*p) (int,int) / void (*p) () / char (*p) (int) 
+    p = add; //함수 이름은 함수의 시작 주소
+    p(x,y);
+● 표준 입력 함수로 문자열 입력 받을 시, \0(널문자)가 자동 생성되지만, 
+    직접 문자열을 조합할 땐 문자열 끝에 \0을 넣어주어야 함
+
+[07/08]
+● 
+    int : 4바이트 (-21억 ~ 21억) (-10^9 ~ 10^9)
+    unsigned int : 4바이트로 양수 표현 (0~42억) (출력시 %u)
+    long : int와 완전 동일 (쓸 일 거의 X) (출력시 %ld)
+    long long : 8바이트로 정수 표현 (-900경 ~ 900경) (-10^19 ~ 10^19) (출력시 %lld)
+
+[07/10]
+● 동적계획법의 경우, 문제를 dp[1]부터 dp[N]까지 연결할 수 있는 방법을 생각해보자.
+
+[07/15]
+● 구조체 초기화 struct point p1 = {10,20};
+
+[07/16]
+● isdigit(int c) >> char 타입이 10진수 숫자로 변경이 가능하면 true반환 (1~9)
+
+[07/26]
+● 원형 큐의 경우, 최대 큐가 MAX-1이므로 배열 할당에 주의
+
+● testcase가 여러개인 경우, 변수와 스택&큐 등의 함수 초기화에 신경
+
+● 다른 함수에서 동적 할당된 배열은 main()에서 free할 수 없다
+
+● 분할 정복
+https://data-make.tistory.com/232
+
+[08/02]
+● pow함수는 반환 값이 double형이므로 임의로 형변환 시 값이 다를 수 있음
+    (직접 제곱 함수 만들어 사용하는 것을 추천)
+
+● 재귀함수는 Stack 크기의 재한 때문에 5000회만 넘어가도 Stack Overflow가 발생한다
+    따라서 많은 횟수로 동작하는 코드의 경우 재귀함수로 구현이 불가능
+
+[08/05]
+● 파일 입출력
+FILE*stream;
+stream = fopen("input1.txt", "r");
+while (!feof(stream)) {
+	fscanf(stream, "%d", &num);
+}
+fclose(stream);
+
+● Linked List
+- Dummy Node를 사용하면, 첫 노드를 Append 할 때 경우를 구분하지 않아도 됨
+- Append 함수를 노드가 맨 끝에 추가되는 방식으로 구현하려면 Node* cur을 이용해 맨 끝으로 이동후 
+  추가 해야함
+
+[08/07]
+● 이분 탐색에서 upperBound, lowerBound 알고리즘이 아닌 응용해야하는 binarySearch 인 경우
+     따로 결과값을 담을 변수를 사용하자
+
+● fgets(arr, 배열크기, stream)
+
+[08/15]
+● pointer NULL 비교할 때, if (!cur) 로 사용  X
+		 >>    if (cur != NULL)  O
+
+● 포인터와 구조체 배열
+List list[5] // 구조체 배열
+func(list) //list의 시작주소 매개변수 >> void func(List* listArr)
+				listArr[i].head or 
+				(listArr + i) ->head 로 사용
+
+List list // 구조체 변수
+func(&list) //list의 시작주소 매개변수 >> void func(List* list)
+				  *list.head or
+				  list->head로 사용
+
+※ 구조체 배열이든, 구조체 변수든 함수의 매개변수로 포인터를 사용하려면
+    시작주소를 넘겨야 함
+
+[09/05]
+● 함수포인터
+
+
+
+
+
+
+
