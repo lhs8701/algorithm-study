@@ -4,7 +4,7 @@ from collections import deque
 N = int(sys.stdin.readline().rstrip())
 arr = list(map(int, sys.stdin.readline().rstrip().split()))
 lis = [arr[0]]
-dp = [0] * N
+len_ = [0] * N
 stack = deque([])
 
 
@@ -26,7 +26,7 @@ for i in range(1, N):
         lis.append(arr[i])
     else:
         lis[idx] = arr[i]
-    dp[i] = idx
+    len_[i] = idx
 
 d = len(lis) - 1
 print(d + 1)
@@ -34,7 +34,7 @@ print(d + 1)
 for i in range(N - 1, -1, -1):
     if d == -1:
         break
-    if dp[i] == d:
+    if len_[i] == d:
         stack.appendleft(arr[i])
         d -= 1
 
