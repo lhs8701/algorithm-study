@@ -17,3 +17,4 @@ for i in range(sizeB):
         minB[i] = '5'
 
 print(int("".join(minA)) + int("".join(minB)), int("".join(maxA)) + int("".join(maxB)))
+#test
