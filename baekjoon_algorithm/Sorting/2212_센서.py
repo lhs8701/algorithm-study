@@ -5,36 +5,18 @@ N = int(sys.stdin.readline().rstrip())
 K = int(sys.stdin.readline().rstrip())
 sensor = list(map(int, sys.stdin.readline().rstrip().split()))
 sensor.sort()
-dict = {}
-graph = [[] for i in range(N)]
-ans = []
-cnt = 0
-for i in range(len(sensor)):
-    if sensor[i] in dict:
-        continue
-    else:
-        dict[sensor[i]] = cnt
-        cnt += 1
 
 arr = []
 for i in range(1, len(sensor)):
-    heapq.heappush(arr, (sensor[i] - sensor[i - 1], sensor[i - 1], sensor[i], 1))
-    j = dict[sensor[i - 1]]
-    graph[j].append((sensor[i] - sensor[i - 1], sensor[i - 1], sensor[i], 1))
+    arr.append(sensor[i] - sensor[i - 1])
 
-print(dict)
-print(arr)
-print(graph)
+arr.sort(key=lambda x: -x)
 
-heapq.heapify(arr)
-while arr:
-    d, s, e, cnt = heapq.heappop(arr)
-    if cnt == K:
-        ans.append(d)
-    if graph[dict[e]]:
-        for i in graph[dict[e]]:
-            if i != (d, s, e, cnt):
-                heapq.heappush(arr, (i[0] + d, s, i[2], cnt + 1))
-    print(arr)
+ans = sensor[-1] - sensor[0]
+cur = 1
+while arr and cur < K:
+    ans -= arr[0]
+    del arr[0]
+    cur += 1
 
-print(min(ans))
+print(ans)
