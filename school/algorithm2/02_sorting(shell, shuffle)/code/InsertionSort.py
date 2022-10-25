@@ -1,12 +1,12 @@
-def insertionSort(a):    
+def insertionSort(a):
     for i in range(1, len(a)):
-        key = a[i]     # Element to move at current iteration
-        j = i-1
-        while j>=0 and a[j] > key:
-            a[j+1] = a[j]  # Move element a[j] to a[j+1] if a[j] > key
+        key = a[i]  # Element to move at current iteration
+        j = i - 1
+        while j >= 0 and a[j] > key:
+            a[j + 1] = a[j]  # Move element a[j] to a[j+1] if a[j] > key
             j -= 1
-        a[j+1] = key   # Place the key to the farthest it can go to the left
-        #print(a)
+        a[j + 1] = key  # Place the key to the farthest it can go to the left
+        # print(a)
     return a
     
 if __name__ == "__main__":

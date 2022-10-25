@@ -1,21 +1,24 @@
-class LLRB:      
-    class Node:                
-        def __init__(self, key, val): # Constructor
+class LLRB:
+    class Node:
+        def __init__(self, key, val):  # Constructor
             self.key, self.val = key, val
             self.left = self.right = None
-            self.count = 1 # Number of nodes itself and below            
-            self.red = True # Color of parent link
+            self.count = 1  # Number of nodes itself and below
+            self.red = True  # Color of parent link
 
-    def __init__(self): # Constructor
+    def __init__(self):  # Constructor
         self.root = None
 
     @staticmethod
     def getOnNode(h, key):
         while h != None:
-            if key < h.key: h = h.left
-            elif key > h.key: h = h.right
-            else: return h.val # key == x.key
-        return None # The key was NOT found
+            if key < h.key:
+                h = h.left
+            elif key > h.key:
+                h = h.right
+            else:
+                return h.val  # key == x.key
+        return None  # The key was NOT found
 
     def get(self, key):
         return LLRB.getOnNode(self.root, key)
@@ -23,22 +26,23 @@ class LLRB:
     def contains(self, key):
         return self.get(key) != None
 
-    @staticmethod    
+    @staticmethod
     def isRed(x):
-            if x == None: return False
-            return x.red
+        if x == None: return False
+        return x.red
 
-    @staticmethod 
-    def fixUp(h): # Fix the tree such that it conforms to the LLRB representation
+    @staticmethod
+    def fixUp(h):  # Fix the tree such that it conforms to the LLRB representation
         if h == None: return None
         if LLRB.isRed(h.right) and not LLRB.isRed(h.left): h = LLRB.rotateLeft(h)  # Lean right -> lean left
-        if LLRB.isRed(h.left) and LLRB.isRed(h.left.left): h = LLRB.rotateRight(h) # 4-node all leaning left -> 4-node leaning left and right
-        if LLRB.isRed(h.left) and LLRB.isRed(h.right): LLRB.flipColors(h) # Split a 4-node into two 2-nodes
+        if LLRB.isRed(h.left) and LLRB.isRed(h.left.left): h = LLRB.rotateRight(
+            h)  # 4-node all leaning left -> 4-node leaning left and right
+        if LLRB.isRed(h.left) and LLRB.isRed(h.right): LLRB.flipColors(h)  # Split a 4-node into two 2-nodes
         return h
-    
-    @staticmethod 
+
+    @staticmethod
     def rotateLeft(h):
-        assert(LLRB.isRed(h.right))
+        assert (LLRB.isRed(h.right))
         x = h.right
         h.right = x.left
         x.left = h
@@ -48,7 +52,7 @@ class LLRB:
 
     @staticmethod
     def rotateRight(h):
-        assert(LLRB.isRed(h.left))
+        assert (LLRB.isRed(h.left))
         x = h.left
         h.left = x.right
         x.right = h
@@ -64,7 +68,7 @@ class LLRB:
             h = LLRB.rotateLeft(h)
             LLRB.flipColors(h)
         return h
-    
+
     @staticmethod
     def moveRedRight(h):
         LLRB.flipColors(h)
@@ -75,7 +79,7 @@ class LLRB:
 
     @staticmethod
     def flipColors(h):
-        #assert((not LLRB.isRed(h) and LLRB.isRed(h.left) and LLRB.isRed(h.right)) or\
+        # assert((not LLRB.isRed(h) and LLRB.isRed(h.left) and LLRB.isRed(h.right)) or\
         #    (LLRB.isRed(h) and not LLRB.isRed(h.left) and not LLRB.isRed(h.right)))        
         h.red = not h.red
         h.left.red = not h.left.red
@@ -103,34 +107,40 @@ class LLRB:
                 if key == h.key and h.right == None: return None
                 if h.right != None and not LLRB.isRed(h.right) and not LLRB.isRed(h.right.left):
                     h = LLRB.moveRedRight(h)
-                if key == h.key: # Hibbard deletion: place the min in the right subtree on the deleted spot 
+                if key == h.key:  # Hibbard deletion: place the min in the right subtree on the deleted spot
                     h.key = LLRB.minOnNode(h.right)
                     h.value = LLRB.getOnNode(h.right, h.key)
                     h.right = LLRB.deleteMin(h.right)
                 else:
                     h.right = deleteOnNode(h.right, key)
             h = LLRB.fixUp(h)
-            h.count = LLRB.sizeOnNode(h.left) + 1 + LLRB.sizeOnNode(h.right)        
+            h.count = LLRB.sizeOnNode(h.left) + 1 + LLRB.sizeOnNode(h.right)
             return h
+
         self.root = deleteOnNode(self.root, key)
         if self.root != None:
-            self.root.red = False # To not violate the assertion in flipColors(h), where the root splits
+            self.root.red = False  # To not violate the assertion in flipColors(h), where the root splits
 
     def put(self, key, val):
         def putOnNode(x, key, val):
             if x == None: return self.Node(key, val)
-            if key < x.key: x.left = putOnNode(x.left, key, val)
-            elif key > x.key: x.right = putOnNode(x.right, key, val)
-            else: x.val = val # key == x.key
+            if key < x.key:
+                x.left = putOnNode(x.left, key, val)
+            elif key > x.key:
+                x.right = putOnNode(x.right, key, val)
+            else:
+                x.val = val  # key == x.key
             x = LLRB.fixUp(x)
             x.count = LLRB.sizeOnNode(x.left) + 1 + LLRB.sizeOnNode(x.right)
-            return x     
+            return x
+
         self.root = putOnNode(self.root, key, val)
-        self.root.red = False # To not violate the assertion in flipColors(h), where the root splits
+        self.root.red = False  # To not violate the assertion in flipColors(h), where the root splits
 
     @staticmethod
     def minOnNode(h):
-        if h == None: return None
+        if h == None:
+            return None
         else:
             while h.left != None:
                 h = h.left
@@ -138,10 +148,11 @@ class LLRB:
 
     def min(self):
         return LLRB.minOnNode(self.root)
-        
+
     def max(self):
-        if self.root == None: return None
-        else:            
+        if self.root == None:
+            return None
+        else:
             x = self.root
             while x.right != None:
                 x = x.right
@@ -150,67 +161,94 @@ class LLRB:
     def floor(self, key):
         def floorOnNode(x, key):
             if x == None: return None
-            if key == x.key: return x
-            elif key < x.key: return floorOnNode(x.left, key)
+            if key == x.key:
+                return x
+            elif key < x.key:
+                return floorOnNode(x.left, key)
 
             t = floorOnNode(x.right, key)
-            if t != None: return t
-            else: return x
+            if t != None:
+                return t
+            else:
+                return x
+
         x = floorOnNode(self.root, key)
-        if x == None: return None
-        else: return x.key
+        if x == None:
+            return None
+        else:
+            return x.key
 
     def ceiling(self, key):
         def ceilingOnNode(x, key):
             if x == None: return None
-            if key == x.key: return x
-            elif x.key < key: return ceilingOnNode(x.right, key)
+            if key == x.key:
+                return x
+            elif x.key < key:
+                return ceilingOnNode(x.right, key)
 
             t = ceilingOnNode(x.left, key)
-            if t != None: return t
-            else: return x
+            if t != None:
+                return t
+            else:
+                return x
+
         x = ceilingOnNode(self.root, key)
-        if x == None: return None
-        else: return x.key
+        if x == None:
+            return None
+        else:
+            return x.key
 
     @staticmethod
     def sizeOnNode(x):
-            if x == None: return 0
-            else: return x.count
+        if x == None:
+            return 0
+        else:
+            return x.count
 
-    def size(self):        
-        return LLRB.sizeOnNode(self.root)    
+    def size(self):
+        return LLRB.sizeOnNode(self.root)
 
-    def rank(self, key): # How many keys < key?
-        def rankOnNode(x, key): # rank(key) on the subtree rooted at x
+    def rank(self, key):  # How many keys < key?
+        def rankOnNode(x, key):  # rank(key) on the subtree rooted at x
             if x == None: return 0
-            if key < x.key: return rankOnNode(x.left, key)
-            elif key > x.key: return LLRB.sizeOnNode(x.left) + 1 + rankOnNode(x.right, key)
-            else: return LLRB.sizeOnNode(x.left) # key == x.key
+            if key < x.key:
+                return rankOnNode(x.left, key)
+            elif key > x.key:
+                return LLRB.sizeOnNode(x.left) + 1 + rankOnNode(x.right, key)
+            else:
+                return LLRB.sizeOnNode(x.left)  # key == x.key
+
         return rankOnNode(self.root, key)
 
     def select(self, idx):
-        def selectOnNode(x, idx): # idx-th element on the subtree rooted at x
-            if x == None: return None # idx-th element does not exist
-            if idx < LLRB.sizeOnNode(x.left): return selectOnNode(x.left, idx)
-            elif idx > LLRB.sizeOnNode(x.left): return selectOnNode(x.right, idx-LLRB.sizeOnNode(x.left)-1)
-            else: return x.key # idx == LLRB.sizeOnNode(x.left)
-        return selectOnNode(self.root, idx)        
+        def selectOnNode(x, idx):  # idx-th element on the subtree rooted at x
+            if x == None: return None  # idx-th element does not exist
+            if idx < LLRB.sizeOnNode(x.left):
+                return selectOnNode(x.left, idx)
+            elif idx > LLRB.sizeOnNode(x.left):
+                return selectOnNode(x.right, idx - LLRB.sizeOnNode(x.left) - 1)
+            else:
+                return x.key  # idx == LLRB.sizeOnNode(x.left)
 
-    def inorder(self):        
+        return selectOnNode(self.root, idx)
+
+    def inorder(self):
         def inorderOnNode(x, q):
             if x == None: return
             inorderOnNode(x.left, q)
             q.append(x.key)
             inorderOnNode(x.right, q)
+
         q = []
         inorderOnNode(self.root, q)
         return q
 
     def levelorder(self):
         qNode, qKey, idx = [], [], 0
-        if self.root == None: return qNode
-        else: qNode.append(self.root)        
+        if self.root == None:
+            return qNode
+        else:
+            qNode.append(self.root)
         while idx < len(qNode):
             x = qNode[idx]
             if x.left != None: qNode.append(x.left)
@@ -219,21 +257,25 @@ class LLRB:
             idx += 1
         return qKey
 
-    def rangeCount(self, lo, hi): # Number of keys between lo and hi, both inclusive
-        if self.contains(hi): return self.rank(hi) - self.rank(lo) + 1
-        else: return self.rank(hi) - self.rank(lo)
+    def rangeCount(self, lo, hi):  # Number of keys between lo and hi, both inclusive
+        if self.contains(hi):
+            return self.rank(hi) - self.rank(lo) + 1
+        else:
+            return self.rank(hi) - self.rank(lo)
 
-    def rangeSearch(self, lo, hi): # Return all keys between lo and hi, both inclusive
+    def rangeSearch(self, lo, hi):  # Return all keys between lo and hi, both inclusive
         def rangeSearchOnNode(x, lo, hi, q):
             if x == None: return
             if lo < x.key: rangeSearchOnNode(x.left, lo, hi, q)
             if lo <= x.key and x.key <= hi: q.append(x.key)
             if x.key < hi: rangeSearchOnNode(x.right, lo, hi, q)
+
         q = []
         rangeSearchOnNode(self.root, lo, hi, q)
         return q
 
-if __name__ == "__main__":   
+
+if __name__ == "__main__":
     '''
     bst = LLRB() 
     print(bst.size())
@@ -288,20 +330,20 @@ if __name__ == "__main__":
     '''
     print("inorder traversal")
     bst2 = LLRB()
-    bst2.put("S",1)
-    bst2.put("E",2)
-    bst2.put("Y",3)
-    bst2.put("A",4)
-    bst2.put("R",5)
-    bst2.put("C",6)
-    bst2.put("H",7)
-    bst2.put("M",8)
-    bst2.put("L",9)
-    bst2.put("P",10)
+    bst2.put("S", 1)
+    bst2.put("E", 2)
+    bst2.put("Y", 3)
+    bst2.put("A", 4)
+    bst2.put("R", 5)
+    bst2.put("C", 6)
+    bst2.put("H", 7)
+    bst2.put("M", 8)
+    bst2.put("L", 9)
+    bst2.put("P", 10)
     print(bst2.rank("H"))
     print(bst2.select(4))
     print("level order", bst2.levelorder())
-    print("inorder",bst2.inorder()) 
+    print("inorder", bst2.inorder())
     print("range count", bst2.rangeCount("F", "T"))
     print("range search", bst2.rangeSearch("F", "T"))
     print("range count", bst2.rangeCount("B", "I"))

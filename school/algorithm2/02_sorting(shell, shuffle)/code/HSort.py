@@ -1,15 +1,15 @@
 def shellSort(a):
     N = len(a)
     h = 1
-    while h < N/3:
-        h = 3*h + 1   # Knuth's Sequence 1, 4, 13, 40, 121, 364, ...
+    while h < N / 3:
+        h = 3 * h + 1  # Knuth's Sequence 1, 4, 13, 40, 121, 364, ...
 
     numSwapsTotal = 0
-    while h >= 1:        
+    while h >= 1:
         _, numSwaps = hInsertionSort(a, h)
         numSwapsTotal += numSwaps
-        h = h//3
-    
+        h = h // 3
+
     return a, numSwapsTotal
 
 def hInsertionSort(a, h):
