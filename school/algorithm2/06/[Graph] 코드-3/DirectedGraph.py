@@ -1,19 +1,21 @@
-import requests # For reading web pages
-import re # For searching with regular expressions
+import requests  # For reading web pages
+import re  # For searching with regular expressions
 import timeit
 from queue import Queue
 
 '''
 Class for storing directed graphs
 '''
-class Digraph:
-    def __init__(self, V): # Constructor
-        self.V = V # Number of vertices
-        self.E = 0 # Number of edges
-        self.adj = [[] for _ in range(V)]   # adj[v] is a list of vertices pointed from v
 
-    def addEdge(self, v, w): # Add a directed edge v->w. Self-loops and parallel edges are allowed
-        self.adj[v].append(w)        
+
+class Digraph:
+    def __init__(self, V):  # Constructor
+        self.V = V  # Number of vertices
+        self.E = 0  # Number of edges
+        self.adj = [[] for _ in range(V)]  # adj[v] is a list of vertices pointed from v
+
+    def addEdge(self, v, w):  # Add a directed edge v->w. Self-loops and parallel edges are allowed
+        self.adj[v].append(w)
         self.E += 1
 
     def outDegree(self, v):
@@ -24,34 +26,39 @@ class Digraph:
         for v in range(self.V):
             for w in self.adj[v]:
                 rtList.append(f"{v}->{w}\n")
-        return "".join(rtList)        
+        return "".join(rtList)
 
-    def reverse(self): # return a digraph with all edges reversed
+    def reverse(self):  # return a digraph with all edges reversed
         g = Digraph(self.V)
         for v in range(self.V):
             for w in self.adj[v]: g.addEdge(w, v)
         return g
 
+
 '''
 Class for storing the results of depth-first search
 '''
-class DFS:    
+
+
+class DFS:
     # Constructor
     # Perform DFS on graph g starting from the source vertex s
-    def __init__(self, g, s): 
-        def recur(v):        
-            self.visited[v] = True            
+    def __init__(self, g, s):
+        def recur(v):
+            self.visited[v] = True
             for w in g.adj[v]:
-                if not self.visited[w]: 
+                if not self.visited[w]:
                     recur(w)
                     self.fromVertex[w] = v
-        assert(isinstance(g, Digraph) and s>=0 and s<g.V)
+
+        assert (isinstance(g, Digraph) and s >= 0 and s < g.V)
         self.g, self.s = g, s
         self.visited = [False for _ in range(g.V)]
         self.fromVertex = [None for _ in range(g.V)]
-        recur(s)     
+        recur(s)
 
-    # Return a list of vertices on the path from s to v
+        # Return a list of vertices on the path from s to v
+
     #     based on the results of DFS
     def pathTo(self, v):
         if not self.visited[v]: return None
@@ -70,43 +77,46 @@ class DFS:
 # This function is used to evaluate the speed of SCC class
 # 
 def DFSforEvaluation(g):
-    def recur(v):        
-            visited[v] = True            
-            for w in g.adj[v]:
-                if not visited[w]: 
-                    recur(w)
-                    fromVertex[w] = v
-    assert(isinstance(g, Digraph))    
+    def recur(v):
+        visited[v] = True
+        for w in g.adj[v]:
+            if not visited[w]:
+                recur(w)
+                fromVertex[w] = v
+
+    assert (isinstance(g, Digraph))
     visited = [False for _ in range(g.V)]
     fromVertex = [None for _ in range(g.V)]
     for v in range(g.V):
         if not visited[v]:
-            recur(v)        
-    
+            recur(v)
+
     return visited, fromVertex
 
 
 '''
 Class for storing the results of breadth-first search
 '''
+
+
 class BFS:
     # Constructor
     # PerformBDFS on graph g starting from the source vertex s
-    def __init__(self, g, s):        
-        assert(isinstance(g, Digraph) and s>=0 and s<g.V)
+    def __init__(self, g, s):
+        assert (isinstance(g, Digraph) and s >= 0 and s < g.V)
         self.g, self.s = g, s
         self.visited = [False for _ in range(g.V)]
         self.fromVertex = [None for _ in range(g.V)]
         self.distance = [None for _ in range(g.V)]
         queue = Queue()
-        queue.put(s)        
+        queue.put(s)
         self.visited[s] = True
         self.distance[s] = 0
-        while queue.qsize() > 0:         
-            v = queue.get()            
+        while queue.qsize() > 0:
+            v = queue.get()
             for w in g.adj[v]:
                 if not self.visited[w]:
-                    queue.put(w)                    
+                    queue.put(w)
                     self.visited[w] = True
                     self.fromVertex[w] = v
                     self.distance[w] = self.distance[v] + 1
@@ -134,27 +144,30 @@ class BFS:
 Discover web addresses through BFS, starting from root addresses as the source set
     roots: list of web addresses to use as the source set
 '''
-webaddrPattern = re.compile("https://(?:\\w+\\.)+(?:\\w+)") # Regex pattern for a web address. '?:' indicates a non-capturing group
+webaddrPattern = re.compile(
+    "https://(?:\\w+\\.)+(?:\\w+)")  # Regex pattern for a web address. '?:' indicates a non-capturing group
+
+
 def webCrawl(roots, maxDepth=1):
     queue = Queue()
-    discovered = {} # Symbol table of discovered sites and depth, where depth is the distance from sources
-    for v in roots: 
+    discovered = {}  # Symbol table of discovered sites and depth, where depth is the distance from sources
+    for v in roots:
         queue.put(v)
-        discovered[v] = 0     
-    
-    while queue.qsize() > 0:    
-        v = queue.get()        
+        discovered[v] = 0
+
+    while queue.qsize() > 0:
+        v = queue.get()
         depth = discovered[v]
         if depth > maxDepth: break
 
-        try:            
-            resp = requests.get(v)    # Receive response by visiting the web site at v            
-            if resp.status_code == 200: # HTTP status code '200 OK' means the page was successfully retrieved
+        try:
+            resp = requests.get(v)  # Receive response by visiting the web site at v
+            if resp.status_code == 200:  # HTTP status code '200 OK' means the page was successfully retrieved
                 print(v, f"(depth={depth})")
                 for w in webaddrPattern.findall(resp.text):
                     if w not in discovered:
                         discovered[w] = depth + 1
-                        queue.put(w)                        
+                        queue.put(w)
         except requests.exceptions.ConnectionError as error:
             pass
 
@@ -162,17 +175,19 @@ def webCrawl(roots, maxDepth=1):
 '''
 Perform the topological sort on a DAG g, and return list of vertices in reverse DFS postorder
 '''
-def topologicalSort(g):
-    def recur(v):        
-        visited[v] = True        
-        for w in g.adj[v]:            
-            if not visited[w]: recur(w)
-        reverseList.append(v) # Add v to the stack if all adjacent vertices were visited                
 
-    assert(isinstance(g, Digraph))
+
+def topologicalSort(g):
+    def recur(v):
+        visited[v] = True
+        for w in g.adj[v]:
+            if not visited[w]: recur(w)
+        reverseList.append(v)  # Add v to the stack if all adjacent vertices were visited
+
+    assert (isinstance(g, Digraph))
     visited = [False for _ in range(g.V)]
     reverseList = []
-    for v in range(g.V): 
+    for v in range(g.V):
         if not visited[v]: recur(v)
 
     reverseList.reverse()
@@ -182,11 +197,13 @@ def topologicalSort(g):
 '''
 Class that finds SCC (Strongly-Connected Components) and stores the results    
 '''
-class SCC:
-    def __init__(self, g): # Do strongly-connected-components pre-processing, based on Kosaraju-Sharir algorithm
-        pass       
 
-    def connected(self, v, w): # Are v and w connected?
+
+class SCC:
+    def __init__(self, g):  # Do strongly-connected-components pre-processing, based on Kosaraju-Sharir algorithm
+        pass
+
+    def connected(self, v, w):  # Are v and w connected?
         pass
 
 
@@ -251,7 +268,6 @@ if __name__ == "__main__":
     print(bfs.pathTo(7), bfs.distTo(7))
     print(dfs.hasPathTo(6))
     print(dfs.hasPathTo(7))'''
-
 
     '''# Unit test for Web crawling
     #resp = requests.get("https://www.naver.com/")
@@ -363,7 +379,7 @@ if __name__ == "__main__":
     print("scc3.connected(7,11)", scc3.connected(7,11))
     print("scc3.connected(10,12)", scc3.connected(10,12))
     print()'''
-    
+
     '''# Unit test for speed
     n=10000
     tSCC = timeit.timeit(lambda: scc3.connected(4,5), number=n)/n    
@@ -371,7 +387,3 @@ if __name__ == "__main__":
     print(f"{n} calls of connected() on g3 took {tSCC:.10f} sec on average, and the same number of calls of DFS() took {tDFS:.10f} sec on average")
     if tSCC*10 < tDFS: print("pass")
     else: print("fail")'''
-    
-
-
-    
