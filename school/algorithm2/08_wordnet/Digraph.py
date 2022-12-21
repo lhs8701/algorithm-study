@@ -261,8 +261,6 @@ Return the common ancestor and the length of sap
 
 
 def sap(g, aList, bList):
-    # Q 초기화 (aList와 bList객체 모두 put)
-    # 3-tuple : (정점번호, aList/bList 중 어디서 왔는지(aList->0 / bList->1), 거쳐온거리)
     visited = [[-1, -1] for _ in range(g.V)]
     sapLength = math.inf
     Q = Queue()
@@ -276,7 +274,6 @@ def sap(g, aList, bList):
             sca = a
             break
 
-    # aList와 bList 모두에 속하는 정점번호 v가 있는지 확인 (있다면 (v, 0)을 바로 리턴 후 종료)
     if flag:
         return sca, 0
 
@@ -288,7 +285,7 @@ def sap(g, aList, bList):
         v = Q.get()
         if v[2] > sapLength:
             break
-        for w in g.adj[v[0]]:  # v -> w 간선있는 각 정점 w에 대해
+        for w in g.adj[v[0]]:
             if v[1] == 0:
                 if visited[w][0] == -1:
                     Q.put((w, 0, v[2] + 1))
