@@ -6,16 +6,14 @@ def solve(crane, box):
     M = len(box)
     crane.sort(key=lambda x: x)
     box.sort(key=lambda x: -x)
+    if crane[-1] < box[0]:
+        return -1
+
     arr = [[i, 0] for i in crane]
-    flag = False
     for i in range(M):
-        if flag:
-            break
         weight = box[i]
         for j in range(N):
             if weight > arr[j][0]:
-                if j == N - 1:
-                    flag = True
                 continue
             cur = j
             while cur < N - 1 and arr[cur][1] == arr[cur + 1][1]:
@@ -23,17 +21,14 @@ def solve(crane, box):
             arr[cur][1] += 1
             break
 
-    if flag:
-        return -1
-    else:
-        return arr[N - 1][1]
+    return arr[-1][1]
 
 
-N = int(sys.stdin.readline().rstrip())
-crane = list(map(int, sys.stdin.readline().rstrip().split()))
-M = int(sys.stdin.readline().rstrip())
-box = list(map(int, sys.stdin.readline().rstrip().split()))
-print(solve(crane, box))
+# N = int(sys.stdin.readline().rstrip())
+# crane = list(map(int, sys.stdin.readline().rstrip().split()))
+# M = int(sys.stdin.readline().rstrip())
+# box = list(map(int, sys.stdin.readline().rstrip().split()))
+# print(solve(crane, box))
 
 if __name__ == "__main__":
 
