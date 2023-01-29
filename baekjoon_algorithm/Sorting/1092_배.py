@@ -24,11 +24,11 @@ def solve(crane, box):
     return arr[-1][1]
 
 
-# N = int(sys.stdin.readline().rstrip())
-# crane = list(map(int, sys.stdin.readline().rstrip().split()))
-# M = int(sys.stdin.readline().rstrip())
-# box = list(map(int, sys.stdin.readline().rstrip().split()))
-# print(solve(crane, box))
+N = int(sys.stdin.readline().rstrip())
+crane = list(map(int, sys.stdin.readline().rstrip().split()))
+M = int(sys.stdin.readline().rstrip())
+box = list(map(int, sys.stdin.readline().rstrip().split()))
+print(solve(crane, box))
 
 if __name__ == "__main__":
 
