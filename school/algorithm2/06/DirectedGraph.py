@@ -46,7 +46,7 @@ class DFS:
     def __init__(self, g, s):
         def recur(v):
             self.visited[v] = True
-            for w in g.adj[v]:
+            for w in g.mat[v]:
                 if not self.visited[w]:
                     recur(w)
                     self.fromVertex[w] = v
@@ -79,7 +79,7 @@ class DFS:
 def DFSforEvaluation(g):
     def recur(v):
         visited[v] = True
-        for w in g.adj[v]:
+        for w in g.mat[v]:
             if not visited[w]:
                 recur(w)
                 fromVertex[w] = v
@@ -180,7 +180,7 @@ Perform the topological sort on a DAG g, and return list of vertices in reverse 
 def topologicalSort(g):
     def recur(v):
         visited[v] = True
-        for w in g.adj[v]:
+        for w in g.mat[v]:
             if not visited[w]: recur(w)
         reverseList.append(v)  # Add v to the stack if all adjacent vertices were visited
 
@@ -203,7 +203,7 @@ class SCC:
     def __init__(self, g):  # Do strongly-connected-components pre-processing, based on Kosaraju-Sharir algorithm
         def recur(v):  # DFS to mark all vertices connected to v
             self.id[v] = self.count
-            for w in g.adj[v]:
+            for w in g.mat[v]:
                 if self.id[w] < 0:
                     recur(w)
 

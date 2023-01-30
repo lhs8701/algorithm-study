@@ -34,7 +34,7 @@ class DFS:
     def __init__(self, g, s): 
         def recur(v):        
             self.visited[v] = True            
-            for w in g.adj[v]:
+            for w in g.mat[v]:
                 if not self.visited[w]: 
                     recur(w)
                     self.fromVertex[w] = v
@@ -111,7 +111,7 @@ class CC:
     def __init__(self, g): # Do connected-components pre-processing
         def recur(v): # DFS to mark all vertices connected to v            
             self.id[v] = self.count
-            for w in g.adj[v]:
+            for w in g.mat[v]:
                 if self.id[w] < 0: 
                     recur(w)                            
         self.g = g

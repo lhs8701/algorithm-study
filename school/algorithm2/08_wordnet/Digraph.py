@@ -78,7 +78,7 @@ class DFS:
     def __init__(self, g, s):
         def recur(v):
             self.visited[v] = True
-            for w in g.adj[v]:
+            for w in g.mat[v]:
                 if not self.visited[w]:
                     recur(w)
                     self.fromVertex[w] = v
@@ -161,7 +161,7 @@ def BFSforEvaluation(g):
         distance[s] = 0
         while queue.qsize() > 0:
             v = queue.get()
-            for w in g.adj[v]:
+            for w in g.mat[v]:
                 if not visited[w]:
                     queue.put(w)
                     visited[w] = True
@@ -183,7 +183,7 @@ Perform the topological sort on a DAG g, and return list of vertices in reverse 
 def topologicalSort(g):
     def recur(v):
         visited[v] = True
-        for w in g.adj[v]:
+        for w in g.mat[v]:
             if not visited[w]: recur(w)
         reverseList.append(v)  # Add v to the stack if all adjacent vertices were visited
 
@@ -208,7 +208,7 @@ def topologicalSortWithCycleDetection(g):
     def recur(v):
         visited[v] = True
         verticesInRecurStack.add(v)
-        for w in g.adj[v]:
+        for w in g.mat[v]:
             if w in verticesInRecurStack:  # Edge found to a vertex in the recursive stack
                 print("cycle detected on vertex", w)
                 return True
@@ -236,7 +236,7 @@ def cycleDetection(g):
     def recur(v):
         visited[v] = True
         verticesInRecurStack.add(v)
-        for w in g.adj[v]:
+        for w in g.mat[v]:
             if w in verticesInRecurStack:  # Edge found to a vertex in the recursive stack
                 # print("cycle detected on vertex", w)
                 return True
@@ -285,7 +285,7 @@ def sap(g, aList, bList):
         v = Q.get()
         if v[2] > sapLength:
             break
-        for w in g.adj[v[0]]:
+        for w in g.mat[v[0]]:
             if v[1] == 0:
                 if visited[w][0] == -1:
                     Q.put((w, 0, v[2] + 1))

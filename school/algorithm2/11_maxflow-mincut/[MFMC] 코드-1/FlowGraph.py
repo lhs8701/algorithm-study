@@ -149,7 +149,7 @@ def findAugmentingPathBFS(g, s):
     visited[s] = True
     while not q.empty():
         v = q.get()
-        for e in g.adj[v]:
+        for e in g.mat[v]:
             w = e.other(v)
             if e.remainingCapacityTo(w) > 0 and not visited[w]:
                 edgeTo[w] = e
@@ -203,7 +203,7 @@ class FordFulkerson:
         self.visited[self.s] = True
         while not q.empty():
             v = q.get()
-            for e in self.g.adj[v]:
+            for e in self.g.mat[v]:
                 w = e.other(v)
                 if e.remainingCapacityTo(w) > 0 and not self.visited[w]:
                     self.edgeTo[w] = e

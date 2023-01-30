@@ -219,7 +219,7 @@ def topologicalSortWithCycleDetection(g):
     def recur(v):        
         visited[v] = True
         verticesInRecurStack.add(v)
-        for e in g.adj[v]:
+        for e in g.mat[v]:
             if e.w in verticesInRecurStack: # Edge found to a vertex in the recursive stack
                 print("cycle detected on vertex", e.w)                
                 return False 

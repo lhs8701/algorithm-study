@@ -294,7 +294,7 @@ Find an MST (Minimum Spanning Tree) using Prim's algorithm (lazy version)
 def mstPrimLazy(g):
     def include(v):
         included[v] = True
-        for e in g.adj[v]:
+        for e in g.mat[v]:
             if not included[e.other(v)]: pq.put(e)
 
     assert (isinstance(g, WUGraph))
@@ -326,7 +326,7 @@ Find an MST (Minimum Spanning Tree) using Prim's algorithm (eager version)
 def mstPrimEager(g):
     def include(w):
         included[w] = True
-        for e in g.adj[w]:
+        for e in g.mat[w]:
             if not included[e.other(w)]:
                 if not pq.contains(e.other(w)):
                     pq.insert(e.other(w), e)
