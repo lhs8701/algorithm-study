@@ -4,7 +4,6 @@ import heapq
 
 
 def relax(v, edge):
-    global distance, heap
     u = edge[0]
     w = edge[1]
     if distance[u] > distance[v] + w:
@@ -35,8 +34,6 @@ def solve(adj, friends):
         heapq.heappush(heap, (0, start))
         while heap:
             dist, v = heapq.heappop(heap)
-            if distance[v] < dist:
-                continue
             for edge in adj[v]:
                 relax(v, edge)
         distance_list.append(distance)
