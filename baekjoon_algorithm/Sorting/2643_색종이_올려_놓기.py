@@ -17,7 +17,7 @@ for i in range(1, N):
     cnt[i] = max_val + 1
 print(max(cnt))
 
-# ---- upper_bound 이용 ---- #
+# ----- upper_bound 이용 ----- #
 
 import sys
 
