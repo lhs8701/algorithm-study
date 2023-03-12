@@ -1,33 +1,33 @@
-import heapq
 import sys
+import heapq
 
 N = int(sys.stdin.readline().rstrip())
-arr1 = []
-arr2 = []
-sum = 0
+numbers = []
 for i in range(N):
-    input = int(sys.stdin.readline().rstrip())
-    if input > 0:
-        heapq.heappush(arr1, -input)
+    numbers.append(int(sys.stdin.readline().rstrip()))
+numbers.sort()
+negatives = [i for i in numbers if i <= 0]
+positives = [-i for i in numbers if i > 0]
+heapq.heapify(negatives)
+heapq.heapify(positives)
+
+sum = 0
+while len(positives) >= 2:
+    num1 = heapq.heappop(positives) * -1
+    num2 = heapq.heappop(positives) * -1
+    if num1 * num2 >= num1 + num2:
+        sum += num1 * num2
     else:
-        heapq.heappush(arr2, input)
+        sum += num1 + num2
+if positives:
+    sum += heapq.heappop(positives) * -1
 
-while len(arr1) > 1:
-    n1 = -heapq.heappop(arr1)
-    n2 = -heapq.heappop(arr1)
-    if n1 == 1 or n2 == 1:
-        sum += n1 + n2
-    else:
-        sum += n1 * n2
+while len(negatives) >= 2:
+    num1 = heapq.heappop(negatives)
+    num2 = heapq.heappop(negatives)
+    sum += num1 * num2
 
-while len(arr2) > 1:
-    n1 = heapq.heappop(arr2)
-    n2 = heapq.heappop(arr2)
-    sum += n1 * n2
-
-if len(arr1) > 0:
-    sum += -heapq.heappop(arr1)
-if len(arr2) > 0:
-    sum += heapq.heappop(arr2)
+if negatives:
+    sum += heapq.heappop(negatives)
 
 print(sum)

@@ -13,11 +13,9 @@ def dfs(graph, v, visited):
 sys.setrecursionlimit(1000000)
 N = int(sys.stdin.readline().rstrip())
 graph = [[] for _ in range(N + 1)]
-parent = [-1 for _ in range(N + 1)]
 
 for i in range(N - 1):
     u, v = map(int, sys.stdin.readline().rstrip().split())
-    parent[max(u, v)] = min(u, v)
     graph[u].append(v)
     graph[v].append(u)
 
