@@ -1,6 +1,6 @@
 import sys
 import heapq
-#
+##
 N = int(sys.stdin.readline().rstrip())
 numbers = []
 for i in range(N):
