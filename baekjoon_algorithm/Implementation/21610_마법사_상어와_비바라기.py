@@ -2,13 +2,14 @@ import sys
 
 
 def move_one(r, c, move_d, move_s):
+    global N
     dir = [(0, -1), (-1, -1), (-1, 0), (-1, +1), (0, +1), (+1, +1), (+1, 0), (+1, -1)]
     return (r + dir[move_d - 1][0] * move_s) % N, (c + dir[move_d - 1][1] * move_s) % N
 
 
 def move_cloud(cloud, move_d, move_s):
     for i in range(len(cloud)):
-        cloud[i][0], cloud[i][1] = move_one(cloud[i][0], cloud[i][1], move_d, move_s)
+        cloud[i] = move_one(cloud[i][0], cloud[i][1], move_d, move_s)
 
 
 def rain(matrix, cloud):
@@ -17,6 +18,7 @@ def rain(matrix, cloud):
 
 
 def count_of_bucket(matrix, r, c):
+    global N
     cnt = 0
     dir = [(-1, -1), (-1, +1), (+1, +1), (+1, -1)]
     for r_dir, c_dir in dir:
@@ -32,6 +34,7 @@ def water_copy(matrix, cloud):
 
 
 def update_cloud(matrix, cloud):
+    global N
     temp = [[0 for _ in range(N)] for _ in range(N)]
     for i in range(N):
         for j in range(N):
@@ -50,6 +53,7 @@ def update_cloud(matrix, cloud):
     for i in range(N):
         for j in range(N):
             matrix[i][j] += temp[i][j]
+
 
 
 N, M = map(int, sys.stdin.readline().rstrip().split())
