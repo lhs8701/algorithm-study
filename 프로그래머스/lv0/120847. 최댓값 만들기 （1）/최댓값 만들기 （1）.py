@@ -1,6 +1,5 @@
 def solution(numbers):
-    first  = max(numbers)
-    first_idx = numbers.index(first)
-    numbers.pop(first_idx)
-    second = max(numbers)
-    return first * second
+    numbers.sort()
+    length = len(numbers)
+    return numbers[length-1] * numbers[length-2] 
+    
