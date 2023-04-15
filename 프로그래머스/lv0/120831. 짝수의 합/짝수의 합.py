@@ -1,6 +1,7 @@
 def solution(n):
-    sum = 0
-    for i in range(2, n+1, 2):
-        sum+=i
-    answer = sum
+    a = 0
+    for i in range(0, n+1):
+        if i % 2 == 0 :
+            a = a + i
+    return a
     return answer
