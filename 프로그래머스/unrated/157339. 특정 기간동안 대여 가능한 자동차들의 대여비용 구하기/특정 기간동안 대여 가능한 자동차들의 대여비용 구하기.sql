@@ -1,4 +1,3 @@
-
 # SELECT info.*, plan.*, floor(info.DAILY_FEE * (100 - plan.DISCOUNT_RATE) / 100 * 30) as FEE
 SELECT info.CAR_ID, info.CAR_TYPE, floor(info.DAILY_FEE * (100 - plan.DISCOUNT_RATE) / 100 * 30) as FEE
 from CAR_RENTAL_COMPANY_CAR as info 
