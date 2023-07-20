@@ -1,24 +1,13 @@
 import sys
 
 N = int(sys.stdin.readline().rstrip())
-matrix = []
-dp = [[0, 0, 0] for _ in range(4)]
-dp[0][0], dp[0][1], dp[0][2] = map(int, sys.stdin.readline().rstrip().split())
-dp[2][0], dp[2][1], dp[2][2] = dp[0][0], dp[0][1], dp[0][2]
+maxDp = [0, 0, 0]
+minDp = [0, 0, 0]
+maxDp[0], maxDp[1], maxDp[2] = map(int, sys.stdin.readline().rstrip().split())
+minDp[0], minDp[1], minDp[2] = maxDp[0], maxDp[1], maxDp[2]
 for i in range(1, N):
     num0, num1, num2 = map(int, sys.stdin.readline().rstrip().split())
-    dp[1][0] = min(dp[0][0], dp[0][1]) + num0
-    dp[1][1] = min(dp[0][0], dp[0][1], dp[0][2]) + num1
-    dp[1][2] = min(dp[0][1], dp[0][2]) + num2
-    dp[3][0] = max(dp[2][0], dp[2][1]) + num0
-    dp[3][1] = max(dp[2][0], dp[2][1], dp[2][2]) + num1
-    dp[3][2] = max(dp[2][1], dp[2][2]) + num2
+    maxDp = [max(maxDp[0], maxDp[1]) + num0, max(maxDp[0], maxDp[1], maxDp[2]) + num1, max(maxDp[1], maxDp[2]) + num2]
+    minDp = [min(minDp[0], minDp[1]) + num0, min(minDp[0], minDp[1], minDp[2]) + num1, min(minDp[1], minDp[2]) + num2]
 
-    dp[0][0] = dp[1][0]
-    dp[0][1] = dp[1][1]
-    dp[0][2] = dp[1][2]
-    dp[2][0] = dp[3][0]
-    dp[2][1] = dp[3][1]
-    dp[2][2] = dp[3][2]
-
-print(max(dp[2]), min(dp[0]))
+print(max(maxDp), min(minDp))
