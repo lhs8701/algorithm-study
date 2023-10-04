@@ -13,8 +13,6 @@ class Solution {
             order[i] = (double)ongoing / Math.max(1, remain);
             remain -= ongoing;
         }
-        DoubleStream.of(order)
-            .forEach(System.out::println);
         return IntStream.rangeClosed(1, N)
             .boxed()
             .sorted((a, b) -> order[a] == order[b] ? Integer.compare(a, b) : Double.compare(order[b], order[a]))
